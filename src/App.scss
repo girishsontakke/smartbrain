@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(89deg, #f072d7dc 30%, #04c8de 100%);
+  font-family: "Courier New", Courier, monospace;
+}
+
+.App {
+  position: relative;
+  margin: 0 10vw;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  cursor: pointer;
+  transition: transform 1s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -2;
+}
