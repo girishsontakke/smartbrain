@@ -60,6 +60,7 @@ class App extends React.Component {
         <Logo />
         <Rank />
         <ImageLinkForm
+          input={this.state.input}
           onInputChange={this.onInputChange}
           onFormSubmit={this.onFormSubmit}
         />

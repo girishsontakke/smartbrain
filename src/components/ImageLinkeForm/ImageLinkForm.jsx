@@ -2,7 +2,7 @@ import React from "react";
 import "./imageLinkForm.scss";
 import { TextField, Button } from "@material-ui/core";
 
-function ImageLinkForm({ onInputChange, onFormSubmit }) {
+function ImageLinkForm({ onInputChange, onFormSubmit, input }) {
   return (
     <div className="center">
       <div className="center" style={{ flexDirection: "column" }}>
@@ -17,8 +17,9 @@ function ImageLinkForm({ onInputChange, onFormSubmit }) {
             onChange={onInputChange}
           />
           <Button
+            disabled={!input}
             type="submit"
-            variant="outlined"
+            variant="contained"
             size="small"
             style={{
               color: "white",
