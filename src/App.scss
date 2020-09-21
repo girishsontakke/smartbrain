@@ -13,7 +13,13 @@ body {
   position: relative;
   margin: 0 10vw;
 }
-
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 .center {
   display: flex;
   justify-content: center;

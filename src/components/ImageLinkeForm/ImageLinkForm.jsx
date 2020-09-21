@@ -2,16 +2,22 @@ import React from "react";
 import "./imageLinkForm.scss";
 import { TextField, Button } from "@material-ui/core";
 
-function ImageLinkForm() {
+function ImageLinkForm({ onInputChange, onFormSubmit }) {
   return (
     <div className="center">
       <div className="center" style={{ flexDirection: "column" }}>
         <p className="intro">
           {"This magic brain will detect faces in Your image, give it a try"}
         </p>
-        <div>
-          <TextField id="link" label="Enter link of Image" color="primary" />
+        <form onSubmit={onFormSubmit} className="form">
+          <TextField
+            id="link"
+            label="Enter link of Image"
+            color="primary"
+            onChange={onInputChange}
+          />
           <Button
+            type="submit"
             variant="outlined"
             size="small"
             style={{
@@ -22,7 +28,7 @@ function ImageLinkForm() {
           >
             Detect
           </Button>
-        </div>
+        </form>
       </div>
     </div>
   );
