@@ -1,9 +1,21 @@
 import React from "react";
+import "./facerecognition.scss";
 
-function FaceRecognition(props) {
+function FaceRecognition({ imageUrl, box }) {
   return (
     <div className="center">
-      <img src={`${props.imageUrl}`} alt="" width="500px" height="auto" />
+      <div className="image_box">
+        <img id="inputImage" src={`${imageUrl}`} alt="" />
+        <div
+          className="bounding-box"
+          style={{
+            top: box.topRow,
+            bottom: box.bottomRow,
+            right: box.rightCol,
+            left: box.leftCol,
+          }}
+        ></div>
+      </div>
     </div>
   );
 }
