@@ -5,3 +5,12 @@
 .form {
   padding: 30px;
 }
+#link:-webkit-autofill,
+#link:-webkit-autofill:hover,
+#link:-webkit-autofill:focus {
+  // border: 1px solid green !important;
+  // -webkit-text-fill-color: green !important;
+  // -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+  // box-shadow: 0 0 0px 1000px #000 inset !important;
+  transition: background-color 50000s ease-in-out !important;
+}
