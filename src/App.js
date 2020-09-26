@@ -7,13 +7,15 @@ import Logo from "./components/Logo/Logo";
 import ImageLinkForm from "./components/ImageLinkeForm/ImageLinkForm";
 import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
+import SignIn from "./components/SignIn/SignIn";
 
 //ext libraries
 import Particles from "react-particles-js";
 import Clarifai from "clarifai";
+import { Route, Switch } from "react-router-dom";
 
 const app = new Clarifai.App({
-  apiKey: "f22d3456a6464bafbfeb79b8d48ea504",
+  apiKey: process.env.REACT_APP_CLARIFAI_API_KEY,
 });
 
 const particleOptions = {
@@ -69,19 +71,28 @@ class App extends React.Component {
       )
       .catch((err) => console.log(err));
   };
+
+  Main = () => (
+    <div>
+      <Rank />
+      <ImageLinkForm
+        input={this.state.input}
+        onInputChange={this.onInputChange}
+        onFormSubmit={this.onFormSubmit}
+      />
+      <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+    </div>
+  );
   render() {
     return (
       <div className="App">
         <Particles params={particleOptions} className="particles" />
         <Navigation />
         <Logo />
-        <Rank />
-        <ImageLinkForm
-          input={this.state.input}
-          onInputChange={this.onInputChange}
-          onFormSubmit={this.onFormSubmit}
-        />
-        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
+        <Switch>
+          <Route exact path="/" component={this.Main} />
+          <Route exact path="/signin" component={SignIn} />
+        </Switch>
       </div>
     );
   }
