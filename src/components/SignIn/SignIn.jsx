@@ -32,6 +32,7 @@ class SignIn extends React.Component {
           className="container__form"
           onSubmit={this.handleSubmit}
         >
+          <h1>Sign In</h1>
           <div className="center emailField">
             <input
               type="email"
