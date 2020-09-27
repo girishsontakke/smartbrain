@@ -7,13 +7,13 @@ const Navigation = (props) => {
   console.log(props);
   return (
     <nav className="nav">
-      <Button variant="contained" color="primary">
-        {props.location.pathname === "/signin" ? (
-          <Link to="/">{"Home"}</Link>
-        ) : (
-          <Link to="/signin">{"Sign In"}</Link>
-        )}
-      </Button>
+      {props.location.pathname === "/" ? (
+        <Button variant="contained" color="primary">
+          <Link to="/signin">{"Sign out"}</Link>
+        </Button>
+      ) : (
+        <div></div>
+      )}
     </nav>
   );
 };
