@@ -3,11 +3,13 @@ import "./SignIn.scss";
 import { Button } from "@material-ui/core";
 
 class SignIn extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     };
   }
 
@@ -18,13 +20,15 @@ class SignIn extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     });
   };
 
   render() {
-    const { email, password } = this.state;
+    const { name, email, password, confirmPassword } = this.state;
     return (
       <div className="container">
         <form
@@ -32,7 +36,27 @@ class SignIn extends React.Component {
           className="container__form"
           onSubmit={this.handleSubmit}
         >
-          <h1>Sign In</h1>
+          {this.props.location.pathname === "/signup" ? (
+            <h1>Sign Up</h1>
+          ) : (
+            <h1>Sign In</h1>
+          )}
+          {this.props.location.pathname === "/signup" ? (
+            <div className="center nameField">
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={this.handleChange}
+              />
+              <label htmlFor="name" className={name.length ? "shrink" : ""}>
+                username
+              </label>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="center emailField">
             <input
               type="email"
@@ -60,6 +84,25 @@ class SignIn extends React.Component {
               password
             </label>
           </div>
+          {this.props.location.pathname === "/signup" ? (
+            <div className="center passwordField">
+              <input
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={this.handleChange}
+              />
+              <label
+                htmlFor="confirmPassword"
+                className={confirmPassword.length ? "shrink" : ""}
+              >
+                confirm password
+              </label>
+            </div>
+          ) : (
+            <div></div>
+          )}
           <Button
             variant="contained"
             color="primary"
