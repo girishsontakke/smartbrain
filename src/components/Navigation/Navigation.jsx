@@ -4,15 +4,26 @@ import "./navigation.scss";
 import { Link, withRouter } from "react-router-dom";
 
 const Navigation = (props) => {
-  console.log(props);
   return (
     <nav className="nav">
       {props.location.pathname === "/" ? (
-        <Button variant="contained" color="primary">
-          <Link to="/signin">{"Sign out"}</Link>
-        </Button>
+        <Link to="/signin">
+          <Button variant="contained" color="primary">
+            {"Sign out"}
+          </Button>
+        </Link>
+      ) : props.location.pathname === "/signup" ? (
+        <Link to="/signin">
+          <Button variant="contained" color="primary">
+            {"Sign In"}
+          </Button>
+        </Link>
       ) : (
-        <div></div>
+        <Link to="/signup">
+          <Button variant="contained" color="primary">
+            {"Sign Up"}
+          </Button>
+        </Link>
       )}
     </nav>
   );
