@@ -1,4 +1,6 @@
 const express = require("express");
+const bcrypt = require("bcrypt-nodejs");
+
 const app = express();
 
 app.use(express.json());
@@ -37,13 +39,15 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
-  database.users.push({
-    id: "124",
-    name: name,
-    email: email,
-    password: password,
-    entries: 0,
-    joined: new Date(),
+  bcrypt.hash(password, null, null, (err, hash) => {
+    database.users.push({
+      id: "124",
+      name: name,
+      email: email,
+      password: hash,
+      entries: 0,
+      joined: new Date(),
+    });
   });
   res.json(database.users[database.users.length - 1]);
 });
