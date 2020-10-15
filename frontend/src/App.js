@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.scss";
+import "./App.css";
 
 //component
 import Navigation from "./components/Navigation/Navigation";
@@ -39,6 +39,13 @@ class App extends React.Component {
       box: {},
     };
   }
+
+  componentDidMount() {
+    fetch("http://localhost:5000")
+      .then((resp) => resp.json())
+      .then(console.log);
+  }
+
   calculateFaceLocation = (data) => {
     const clarifaiFace =
       data.outputs[0].data.regions[0].region_info.bounding_box;

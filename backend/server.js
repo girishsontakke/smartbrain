@@ -1,10 +1,14 @@
 const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
+const cors = require("cors");
 
 const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+
 const database = {
   users: [
     {
@@ -31,10 +35,10 @@ app.get("/", (req, resp) => {
 });
 
 app.post("/signin", (req, res) => {
-  req.body.name === database.users[0].name &&
+  req.body.email === database.users[0].email &&
   req.body.password === database.users[0].password
     ? res.json("success")
-    : res.status(400).json("failed");
+    : res.status(400).json("failed!!");
 });
 
 app.post("/register", (req, res) => {
@@ -48,8 +52,8 @@ app.post("/register", (req, res) => {
       entries: 0,
       joined: new Date(),
     });
+    res.json(database.users[database.users.length - 1]);
   });
-  res.json(database.users[database.users.length - 1]);
 });
 
 app.get("/profile/:id", (req, res) => {
@@ -73,6 +77,6 @@ app.post("/image", (req, res) => {
   res.status(400).json("user not found");
 });
 
-app.listen(3000, () => {
-  console.log("App is running on http://localhost:3000/");
+app.listen(5000, () => {
+  console.log("App is running on http://localhost:5000/");
 });

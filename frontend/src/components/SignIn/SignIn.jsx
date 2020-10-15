@@ -3,7 +3,7 @@ import "./SignIn.scss";
 import { Button } from "@material-ui/core";
 
 class SignIn extends React.Component {
-  constructor(props) {
+  constructor({props}) {
     super(props);
     this.state = {
       name: "",
@@ -19,16 +19,34 @@ class SignIn extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    (this.props.location.pathname === '/signin')
+    ? fetch('http://localhost:5000/signin', {
+      method:'post',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      })
+    }):
+    (this.state.password===this.state.confirmPassword)?
+    fetch('http:localhost:5000/register', 
+    {
+      method:'post',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        ...this.state
+      })
+    }):
+    alert("password does not match")
     this.setState({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      ...this.state
     });
   };
 
   render() {
     const { name, email, password, confirmPassword } = this.state;
+    const { pathname } = this.props.location;
     return (
       <div className="container">
         <form
@@ -36,12 +54,12 @@ class SignIn extends React.Component {
           className="container__form"
           onSubmit={this.handleSubmit}
         >
-          {this.props.location.pathname === "/signup" ? (
+          {pathname === "/signup" ? (
             <h1>Sign Up</h1>
           ) : (
             <h1>Sign In</h1>
           )}
-          {this.props.location.pathname === "/signup" ? (
+          {pathname === "/signup" ? (
             <div className="center nameField">
               <input
                 type="text"
@@ -84,7 +102,7 @@ class SignIn extends React.Component {
               password
             </label>
           </div>
-          {this.props.location.pathname === "/signup" ? (
+          {pathname === "/signup" ? (
             <div className="center passwordField">
               <input
                 type="password"
