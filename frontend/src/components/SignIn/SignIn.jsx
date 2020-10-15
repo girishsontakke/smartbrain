@@ -24,10 +24,13 @@ class SignIn extends React.Component {
       method:'post',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
+        ...this.state
       })
+    }).then(resp=>resp.json())
+    .then(data=>{
+      if(data==='success'){
+        this.props.history.push('/');
+      } 
     }):
     (this.state.password===this.state.confirmPassword)?
     fetch('http:localhost:5000/register', 
@@ -37,10 +40,16 @@ class SignIn extends React.Component {
       body: JSON.stringify({
         ...this.state
       })
+    }).then(resp=>resp.json())
+    .then(data=>{
+      if (data==='success') this.props.history.push('/');
     }):
     alert("password does not match")
     this.setState({
-      ...this.state
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     });
   };
 
@@ -50,6 +59,7 @@ class SignIn extends React.Component {
     return (
       <div className="container">
         <form
+          method="post"
           action=""
           className="container__form"
           onSubmit={this.handleSubmit}
