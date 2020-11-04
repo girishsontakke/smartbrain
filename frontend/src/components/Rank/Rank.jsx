@@ -1,11 +1,17 @@
 import React from "react";
 import "./rank.scss";
 
-const Rank = () => {
+const Rank = ({ name, entries, isSignedIn }) => {
   return (
     <div className="center rank__container">
-      <div className="rank__text">{`Girish, your current rank is....`}</div>
-      <div className="rank">{`#5`}</div>
+      {isSignedIn ? (
+        <div>
+          <span className="rank__text">{`${name}, your current score is `}</span>
+          <span className="rank">{`${entries}`}</span>
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };

@@ -37,11 +37,8 @@ class App extends React.Component {
       input: "",
       imageUrl: "",
       box: {},
-      isSignedIn: "",
-      user: {
-        name: "",
-        email: "",
-      },
+      isSignedIn: false,
+      user: {},
     };
   }
 
@@ -81,15 +78,37 @@ class App extends React.Component {
     this.setState((prevstate) => ({ imageUrl: prevstate.input }));
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then((response) =>
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      )
+      .then((response) => {
+        this.displayFaceBox(this.calculateFaceLocation(response));
+        if (response) {
+          fetch("http://localhost:5000/image", {
+            method: "put",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+              id: this.state.user.id,
+            }),
+          })
+            .then((resp) => resp.json())
+            .then((count) => {
+              this.setState({
+                user: {
+                  ...this.state.user,
+                  entries: count,
+                },
+              });
+            });
+        }
+      })
       .catch((err) => console.log(err));
   };
 
   Main = () => (
     <div>
-      <Rank />
+      <Rank
+        name={this.state.user.name}
+        entries={this.state.user.entries}
+        isSignedIn={this.state.isSignedIn}
+      />
       <ImageLinkForm
         input={this.state.input}
         onInputChange={this.onInputChange}

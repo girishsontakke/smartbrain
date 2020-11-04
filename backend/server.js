@@ -66,10 +66,10 @@ app.get("/profile/:id", (req, res) => {
   res.json("not found");
 });
 
-app.post("/image", (req, res) => {
+app.put("/image", (req, res) => {
   const { id } = req.body;
   database.users.forEach((user) => {
-    if (user.id === id) {
+    if (user.id == id) {
       user.entries++;
       return res.json(user.entries);
     }
