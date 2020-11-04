@@ -3,7 +3,7 @@ import "./SignIn.scss";
 import { Button } from "@material-ui/core";
 
 class SignIn extends React.Component {
-  constructor({props}) {
+  constructor({ props }) {
     super(props);
     this.state = {
       name: "",
@@ -19,32 +19,37 @@ class SignIn extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    (this.props.location.pathname === '/signin')
-    ? fetch('http://localhost:5000/signin', {
-      method:'post',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        ...this.state
-      })
-    }).then(resp=>resp.json())
-    .then(data=>{
-      if(data==='success'){
-        this.props.history.push('/');
-      } 
-    }):
-    (this.state.password===this.state.confirmPassword)?
-    fetch('http:localhost:5000/register', 
-    {
-      method:'post',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        ...this.state
-      })
-    }).then(resp=>resp.json())
-    .then(data=>{
-      if (data==='success') this.props.history.push('/');
-    }):
-    alert("password does not match")
+    this.props.location.pathname === "/signin"
+      ? fetch("http://localhost:5000/signin", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...this.state,
+          }),
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data === "success") {
+              this.props.history.push("/");
+            }
+          })
+      : this.state.password === this.state.confirmPassword
+      ? fetch("http://localhost:5000/register", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password,
+          }),
+        })
+          .then((resp) => resp.json())
+          .then((user) => {
+            if (user) {
+              this.props.history.push("/");
+            }
+          })
+      : alert("password does not match");
     this.setState({
       name: "",
       email: "",
@@ -64,11 +69,7 @@ class SignIn extends React.Component {
           className="container__form"
           onSubmit={this.handleSubmit}
         >
-          {pathname === "/signup" ? (
-            <h1>Sign Up</h1>
-          ) : (
-            <h1>Sign In</h1>
-          )}
+          {pathname === "/signup" ? <h1>Sign Up</h1> : <h1>Sign In</h1>}
           {pathname === "/signup" ? (
             <div className="center nameField">
               <input

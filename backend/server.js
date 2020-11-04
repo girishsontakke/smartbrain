@@ -5,8 +5,8 @@ const cors = require("cors");
 const app = express();
 
 // Middleware
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cors());
 
 const database = {
@@ -42,7 +42,7 @@ app.post("/signin", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { name, email, password } = req.body;
+  let { name, email, password } = req.body;
   bcrypt.hash(password, null, null, (err, hash) => {
     database.users.push({
       id: "124",
@@ -52,8 +52,8 @@ app.post("/register", (req, res) => {
       entries: 0,
       joined: new Date(),
     });
-    res.json(database.users[database.users.length - 1]);
   });
+  res.json(database.users[2]);
 });
 
 app.get("/profile/:id", (req, res) => {
