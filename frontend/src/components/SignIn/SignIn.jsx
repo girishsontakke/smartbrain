@@ -1,9 +1,10 @@
 import React from "react";
 import "./SignIn.scss";
 import { Button } from "@material-ui/core";
+import { withRouter } from "react-router-dom";
 
 class SignIn extends React.Component {
-  constructor({ props }) {
+  constructor(props) {
     super(props);
     this.state = {
       name: "",
@@ -28,8 +29,9 @@ class SignIn extends React.Component {
           }),
         })
           .then((resp) => resp.json())
-          .then((data) => {
-            if (data === "success") {
+          .then((user) => {
+            if (user) {
+              this.props.loadUser(user);
               this.props.history.push("/");
             }
           })
@@ -38,14 +40,13 @@ class SignIn extends React.Component {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
+            ...this.state,
           }),
         })
           .then((resp) => resp.json())
           .then((user) => {
             if (user) {
+              this.props.loadUser(user);
               this.props.history.push("/");
             }
           })
@@ -146,4 +147,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);

@@ -37,8 +37,23 @@ class App extends React.Component {
       input: "",
       imageUrl: "",
       box: {},
+      isSignedIn: "",
+      user: {
+        name: "",
+        email: "",
+      },
     };
   }
+
+  loadUser = (user) => {
+    this.setState({
+      user: {
+        ...user,
+      },
+      isSignedIn: true,
+    });
+    console.log(this.state.user, this.state.isSignedIn);
+  };
 
   calculateFaceLocation = (data) => {
     const clarifaiFace =
@@ -91,8 +106,16 @@ class App extends React.Component {
         <Logo />
         <Switch>
           <Route exact path="/" component={this.Main} />
-          <Route exact path="/signin" component={SignIn} />
-          <Route exact path="/signup" component={SignIn} />
+          <Route
+            exact
+            path="/signin"
+            component={() => <SignIn loadUser={this.loadUser} />}
+          />
+          <Route
+            exact
+            path="/signup"
+            component={() => <SignIn loadUser={this.loadUser} />}
+          />
         </Switch>
       </div>
     );
