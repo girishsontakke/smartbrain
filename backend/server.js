@@ -1,6 +1,19 @@
 const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
+const knex = require("knex");
+
+require("dotenv").config();
+
+const db = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    user: "girish",
+    password: process.env.DB_PASSWORD,
+    database: "smart-brain",
+  },
+});
 
 const app = express();
 
@@ -30,10 +43,6 @@ const database = {
   ],
 };
 
-app.get("/", (req, resp) => {
-  resp.json(database.users);
-});
-
 app.post("/signin", (req, res) => {
   req.body.email === database.users[0].email &&
   req.body.password === database.users[0].password
@@ -43,17 +52,30 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   let { name, email, password } = req.body;
-  bcrypt.hash(password, null, null, (err, hash) => {
-    database.users.push({
-      id: "124",
+  db("users")
+    .returning("*")
+    .insert({
       name: name,
       email: email,
-      password: hash,
-      entries: 0,
       joined: new Date(),
+    })
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch((err) => {
+      res.status(400).json("user with same email exist");
     });
-    res.json(database.users[database.users.length - 1]);
-  });
+  // bcrypt.hash(password, null, null, (err, hash) => {
+  //   database.users.push({
+  //     id: "124",
+  //     name: name,
+  //     email: email,
+  //     password: hash,
+  //     entries: 0,
+  //     joined: new Date(),
+  //   });
+  //   res.json(database.users[database.users.length - 1]);
+  // });
 });
 
 app.get("/profile/:id", (req, res) => {

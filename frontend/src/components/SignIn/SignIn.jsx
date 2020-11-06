@@ -44,19 +44,16 @@ class SignIn extends React.Component {
           }),
         })
           .then((resp) => resp.json())
-          .then((user) => {
-            if (user) {
-              this.props.loadUser(user);
+          .then((data) => {
+            if (data.name) {
+              console.log(data.name);
+              this.props.loadUser(data);
               this.props.history.push("/");
+            } else {
+              alert(data);
             }
           })
       : alert("password does not match");
-    this.setState({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
   };
 
   render() {
@@ -79,6 +76,7 @@ class SignIn extends React.Component {
                 id="name"
                 value={name}
                 onChange={this.handleChange}
+                required
               />
               <label htmlFor="name" className={name.length ? "shrink" : ""}>
                 username
@@ -94,6 +92,7 @@ class SignIn extends React.Component {
               id="email"
               value={email}
               onChange={this.handleChange}
+              required
             />
             <label htmlFor="email" className={email.length ? "shrink" : ""}>
               email
@@ -106,6 +105,7 @@ class SignIn extends React.Component {
               id="password"
               value={password}
               onChange={this.handleChange}
+              required
             />
             <label
               htmlFor="password"
