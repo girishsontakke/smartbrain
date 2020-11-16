@@ -43,12 +43,22 @@ const database = {
   ],
 };
 
-app.post("/signin", (req, res) => {
-  req.body.email === database.users[0].email &&
-  req.body.password === database.users[0].password
-    ? res.json(database.users[0])
-    : res.status(400).json("failed");
-});
+// app.post("/signin", (req, res) => {
+//   const { email, password } = req.body;
+//   db("login")
+//     .select("*")
+//     .where("email", "=", email)
+//     .then((user) => {
+//       if (user[0].hash === password) {
+//         res.json(user[0]);
+//       } else {
+//         res.status(404).json("password is incorrect");
+//       }
+//     })
+//     .catch((err) => {
+//       res.status(404).json(`user not found for email=${email}`);
+//     });
+// });
 
 app.post("/register", (req, res) => {
   let { name, email, password } = req.body;
@@ -63,40 +73,32 @@ app.post("/register", (req, res) => {
       res.json(user[0]);
     })
     .catch((err) => {
-      res.status(400).json("user with same email exist");
+      res.status(400).json("user with same email exist " + err);
     });
-  // bcrypt.hash(password, null, null, (err, hash) => {
-  //   database.users.push({
-  //     id: "124",
-  //     name: name,
-  //     email: email,
-  //     password: hash,
-  //     entries: 0,
-  //     joined: new Date(),
-  //   });
-  //   res.json(database.users[database.users.length - 1]);
-  // });
 });
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      return res.json(user);
-    }
-  });
-  res.json("not found");
+  db.select("*")
+    .from("users")
+    .where({ id })
+    .then((user) => {
+      user.length ? res.json(user[0]) : res.status(404).json("Not found");
+    });
 });
 
 app.put("/image", (req, res) => {
   const { id } = req.body;
-  database.users.forEach((user) => {
-    if (user.id == id) {
-      user.entries++;
-      return res.json(user.entries);
-    }
-  });
-  res.status(400).json("user not found");
+  db("users")
+    .where({ id })
+    .increment("entries", 1)
+    .returning("entries")
+    .then((entries) => {
+      res.status(200).json(entries[0]);
+    })
+    .catch((err) => {
+      res.status(400).json("unable to submit image", err);
+    });
 });
 
 app.listen(5000, () => {
