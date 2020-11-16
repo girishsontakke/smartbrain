@@ -62,7 +62,7 @@ const database = {
 
 app.post("/register", (req, res) => {
   let { name, email, password } = req.body;
-  db("users")
+  return db("users")
     .returning("*")
     .insert({
       name: name,
@@ -79,7 +79,7 @@ app.post("/register", (req, res) => {
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  db.select("*")
+  return db.select("*")
     .from("users")
     .where({ id })
     .then((user) => {
@@ -89,7 +89,7 @@ app.get("/profile/:id", (req, res) => {
 
 app.put("/image", (req, res) => {
   const { id } = req.body;
-  db("users")
+  return db("users")
     .where({ id })
     .increment("entries", 1)
     .returning("entries")
