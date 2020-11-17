@@ -22,59 +22,54 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-const database = {
-  users: [
-    {
-      id: "123",
-      name: "girish",
-      email: "girish@gmail.com",
-      password: "secret",
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: "124",
-      name: "john",
-      email: "john@gmail.com",
-      password: "secret",
-      entries: 0,
-      joined: new Date(),
-    },
-  ],
-};
-
-// app.post("/signin", (req, res) => {
-//   const { email, password } = req.body;
-//   db("login")
-//     .select("*")
-//     .where("email", "=", email)
-//     .then((user) => {
-//       if (user[0].hash === password) {
-//         res.json(user[0]);
-//       } else {
-//         res.status(404).json("password is incorrect");
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(404).json(`user not found for email=${email}`);
-//     });
-// });
-
-app.post("/register", (req, res) => {
-  let { name, email, password } = req.body;
-  db("users")
-    .returning("*")
-    .insert({
-      name: name,
-      email: email,
-      joined: new Date(),
+app.post("/signin", (req, res) => {
+  const { email, password } = req.body;
+  db.select("*")
+    .from("login")
+    .where({ email })
+    .then((data) => {
+      if (bcrypt.compareSync(password, data[0].hash)) {
+        return db
+          .select("*")
+          .from("users")
+          .where("email", "=", data[0].email)
+          .then((user) => {
+            res.json(user);
+          });
+      } else {
+        res.status(400).json("Invalid credentials");
+      }
     })
-    .then((user) => {
-      res.json(user[0]);
-    })
-    .catch((err) => {
-      res.status(400).json("user with same email exist " + err);
-    });
+    .catch((err) => res.status(404).json("user not found"));
+});
+
+app.post("/register", async (req, res) => {
+  let { name, email, password } = await req.body;
+  const hash = bcrypt.hashSync(password);
+  db.transaction((trx) => {
+    return trx
+      .insert({
+        email: email,
+        hash: hash,
+      })
+      .into("login")
+      .returning("email")
+      .then((signUpEmail) => {
+        return trx
+          .returning("*")
+          .insert({
+            name: name,
+            email: signUpEmail[0],
+            joined: new Date(),
+          })
+          .into("users")
+          .then((user) => {
+            res.json(user[0]);
+          });
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  }).catch((err) => res.status(400).json("user with same email exist " + err));
 });
 
 app.get("/profile/:id", (req, res) => {
