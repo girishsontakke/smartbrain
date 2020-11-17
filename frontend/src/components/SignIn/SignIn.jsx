@@ -30,9 +30,11 @@ class SignIn extends React.Component {
         })
           .then((resp) => resp.json())
           .then((user) => {
-            if (user) {
+            if (user.id) {
               this.props.loadUser(user);
               this.props.history.push("/");
+            } else {
+              alert(user);
             }
           })
       : this.state.password === this.state.confirmPassword
