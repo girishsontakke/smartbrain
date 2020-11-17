@@ -32,15 +32,20 @@ app.post("/signin", (req, res) => {
         return db
           .select("*")
           .from("users")
-          .where("email", "=", data[0].email)
+          .where({ email: data[0].email })
           .then((user) => {
-            res.json(user);
+            res.json(user[0]);
+          })
+          .catch((err) => {
+            res.status(400).json("Invalid credentials");
           });
       } else {
-        res.status(400).json("Invalid credentials");
+        res.status(400).json("Invalid Credentials");
       }
     })
-    .catch((err) => res.status(404).json("user not found"));
+    .catch((err) => {
+      res.status(404).json("User not found");
+    });
 });
 
 app.post("/register", async (req, res) => {
@@ -74,7 +79,8 @@ app.post("/register", async (req, res) => {
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  db.select("*")
+  return db
+    .select("*")
     .from("users")
     .where({ id })
     .then((user) => {
@@ -84,7 +90,7 @@ app.get("/profile/:id", (req, res) => {
 
 app.put("/image", (req, res) => {
   const { id } = req.body;
-  db("users")
+  return db("users")
     .where({ id })
     .increment("entries", 1)
     .returning("entries")
