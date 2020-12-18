@@ -47,9 +47,11 @@ class App extends React.Component {
       user: {
         ...user,
       },
+      imageUrl: "",
+      box: {},
+      input: "",
       isSignedIn: true,
     });
-    console.log(this.state.user, this.state.isSignedIn);
   };
 
   calculateFaceLocation = (data) => {
