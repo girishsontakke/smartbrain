@@ -24,6 +24,10 @@ app.use(cors());
 
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json("Bad Request");
+    return;
+  }
   db.select("*")
     .from("login")
     .where({ email })
@@ -50,6 +54,10 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", async (req, res) => {
   let { name, email, password } = await req.body;
+  if (!email || !password || !name) {
+    res.status(400).json("Bad Request");
+    return;
+  }
   const hash = bcrypt.hashSync(password);
   db.transaction((trx) => {
     return trx
