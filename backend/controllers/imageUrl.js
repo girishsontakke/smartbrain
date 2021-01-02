@@ -16,7 +16,6 @@ const handleFaceDetection = () => (req, res) => {
     .then((data) => res.json(data))
     .catch((err) => {
       res.status(404).json("face not found");
-      console.log(err);
     });
 };
 
