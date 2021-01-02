@@ -2,8 +2,13 @@ const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
+const Clarifai = require("clarifai");
 
 require("dotenv").config();
+
+const clarifaiApp = new Clarifai.App({
+  apiKey: "f22d3456a6464bafbfeb79b8d48ea504",
+});
 
 const db = knex({
   client: "pg",
@@ -54,10 +59,6 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", async (req, res) => {
   let { name, email, password } = await req.body;
-  if (!email || !password || !name) {
-    res.status(400).json("Bad Request");
-    return;
-  }
   const hash = bcrypt.hashSync(password);
   db.transaction((trx) => {
     return trx
@@ -106,8 +107,20 @@ app.put("/image", (req, res) => {
       res.status(200).json(entries[0]);
     })
     .catch((err) => {
-      res.status(400).json("unable to submit image", err);
+      res.status(400).json("unable to submit image");
     });
+});
+
+app.post("/imageUrl", (req, res) => {
+  const { url } = req.body;
+  if (!url) {
+    res.status(400).json("Bad Request");
+    return;
+  }
+  clarifaiApp.models
+    .predict(Clarifai.FACE_DETECT_MODEL, url)
+    .then((data) => res.json(data))
+    .catch((err) => res.status(404).json("face not found"));
 });
 
 app.listen(5000, () => {
