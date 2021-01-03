@@ -21,7 +21,7 @@ class SignIn extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.location.pathname === "/signin"
-      ? fetch("http://localhost:5000/signin", {
+      ? fetch("https://mysterious-dawn-95244.herokuapp.com/signin", {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -38,7 +38,7 @@ class SignIn extends React.Component {
             }
           })
       : this.state.password === this.state.confirmPassword
-      ? fetch("http://localhost:5000/register", {
+      ? fetch("https://mysterious-dawn-95244.herokuapp.com/register", {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

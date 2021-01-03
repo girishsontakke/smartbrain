@@ -73,7 +73,7 @@ class App extends React.Component {
   onFormSubmit = (event) => {
     event.preventDefault();
     this.setState((prevstate) => ({ imageUrl: prevstate.input }));
-    fetch("http://localhost:5000/imageUrl", {
+    fetch("https://mysterious-dawn-95244.herokuapp.com/imageUrl", {
       method: "post",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
@@ -84,7 +84,7 @@ class App extends React.Component {
       .then((response) => {
         this.displayFaceBox(this.calculateFaceLocation(response));
         if (response) {
-          fetch("http://localhost:5000/image", {
+          fetch("https://mysterious-dawn-95244.herokuapp.com/image", {
             method: "put",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({
