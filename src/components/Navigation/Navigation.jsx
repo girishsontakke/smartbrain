@@ -9,7 +9,7 @@ const Navigation = (props) => {
       {props.location.pathname === "/" ? (
         <Link to="/signin">
           <Button variant="contained" color="primary">
-            {"Sign out"}
+            {props.isSignedIn ? "Sign out" : "Sign in"}
           </Button>
         </Link>
       ) : props.location.pathname === "/signup" ? (

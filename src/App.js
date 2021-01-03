@@ -124,7 +124,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Particles params={particleOptions} className="particles" />
-        <Navigation />
+        <Navigation isSignedIn={this.state.isSignedIn} />
         <Logo />
         <Switch>
           <Route exact path="/" component={this.Main} />
